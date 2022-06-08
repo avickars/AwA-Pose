@@ -42,6 +42,9 @@ def create_yolo_data(annotations, images, type, keypointNames):
             if image['name'][0:-4] != name:
                 continue
 
+            # Creating copy of image
+            shutil.copyfile(src=image['path'], dst=f"coco_kpts/images/{image['name']}")
+
             # Getting dimensions of image
             img = cv2.imread(image['path'])
             h, w, c = img.shape
@@ -70,7 +73,6 @@ def create_yolo_data(annotations, images, type, keypointNames):
                         validAnnotation = False
                         newSubAnnotation = ''
 
-
                     # Iterating through the keypoints
                     for keypoint in keypointNames:
                         if keypoint == '_background_':
@@ -97,12 +99,8 @@ def create_yolo_data(annotations, images, type, keypointNames):
                     # Writing to disk
                     if validAnnotation:
                         newAnnotationFile.write(newSubAnnotation)
-
-                # Writing image to image list
-                imageList.write(f"./images/{type}/{image['name']}\n")
-
-                # Creating copy of image
-                shutil.copyfile(src=image['path'], dst=f"coco_kpts/images/{image['name']}")
+        # Writing image to image list
+        imageList.write(f"./images/{type}/{image['name']}\n")
 
 
 
@@ -157,6 +155,7 @@ def main():
 
         validationAnnotations += validationAnnotationsPerAnimal
         trainAnnotations += trainAnnotationsPerAnimal
+
 
     create_yolo_data(annotations=trainAnnotations, images=images, type='train', keypointNames=keyPointNames)
     create_yolo_data(annotations=validationAnnotations, images=images, type='val', keypointNames=keyPointNames)
