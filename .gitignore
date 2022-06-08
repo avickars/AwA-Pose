@@ -1,0 +1,8 @@
+
+coco_kpts/images/
+
+coco_kpts/labels/val2017/
+
+coco_kpts/labels/train2017/
+
+coco_kpts/
